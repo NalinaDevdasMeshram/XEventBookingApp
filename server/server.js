@@ -1,7 +1,17 @@
-import express from "express";
-const app = express();
-const PORT = 5000;
+import app from "./app.js";
+import { config } from "./src/config/env.js";
+import connectDB from "./src/config/db.js";
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+const port = config.PORT; // <--- 🚩 Semicolon must here
+
+// Immediately Invoked Function Expression (IIFE)
+(async () => {
+  try {
+    await connectDB();
+    app.listen(port, () => {
+      console.log("🚀 Server started at port:", port);
+    });
+  } catch (error) {
+    console.error("Failed to start server:", error);
+  }
+})();
